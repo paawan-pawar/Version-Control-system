@@ -1,0 +1,32 @@
+{
+  "blocks": [
+    {
+      "parent_hash": "",
+      "merkle_root": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "author": "system",
+      "message": "Genesis block",
+      "timestamp": 1793033031.1289966,
+      "files": {},
+      "branch": "main",
+      "merge_parents": [],
+      "contents": {},
+      "block_hash": "39dfcbaa7c18629dbe279d6d546fa1231dd5309b20f32aefb20ef76a51feed8c"
+    },
+    {
+      "parent_hash": "39dfcbaa7c18629dbe279d6d546fa1231dd5309b20f32aefb20ef76a51feed8c",
+      "merkle_root": "1d8d4992134dbecb2bdccf012f548348185a9612a25b1b8d59761a1341045e7f",
+      "author": "user",
+      "message": "First user commit: added demo.txt",
+      "timestamp": 1793033342.8737495,
+      "files": {
+        "demo.txt": "1d8d4992134dbecb2bdccf012f548348185a9612a25b1b8d59761a1341045e7f"
+      },
+      "branch": "main",
+      "merge_parents": [],
+      "contents": {
+        "demo.txt": "This is a demo file recorded in the blockchain!\n"
+      },
+      "block_hash": "6cfe274bf1009607da86d7971b2a5487b9c72c71f61b59e1671fa1a5817e72e2"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}BVCS · Branches{% endblock %}
+{% block content %}
+
+<h1>Branches</h1>
+
+{% if error %}
+<div class="alert"><strong>Error:</strong> {{ error }}</div>
+{% endif %}
+
+<table class="branches">
+  <thead><tr><th>Branch</th><th>Tip</th><th></th></tr></thead>
+  <tbody>
+  {% for name, info in branches.items() %}
+    <tr>
+      <td>
+        <span class="branch">{{ name }}</span>
+        {% if name == head.branch %}<span class="badge ok">current</span>{% endif %}
+      </td>
+      <td><code>{{ info.short }}</code></td>
+      <td>
+        {% if name != head.branch %}
+        <form method="post" action="{{ url_for('checkout', name=name) }}" style="display:inline">
+          <button type="submit">Checkout</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>Create branch</h2>
+<form method="post" action="{{ url_for('branches') }}" class="form-row">
+  <input type="text" name="name" placeholder="new-branch-name" required>
+  <select name="source">
+    {% for name in branches.keys() %}
+      <option value="{{ name }}" {% if name == head.branch %}selected{% endif %}>{{ name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Create</button>
+</form>
+
+<h2>Merge</h2>
+<form method="post" action="{{ url_for('do_merge') }}" class="form-row">
+  <label>Target</label>
+  <select name="target">
+    {% for name in branches.keys() %}
+      <option value="{{ name }}" {% if name == head.branch %}selected{% endif %}>{{ name }}</option>
+    {% endfor %}
+  </select>
+  <label>Source</label>
+  <select name="source">
+    {% for name in branches.keys() %}<option value="{{ name }}">{{ name }}</option>{% endfor %}
+  </select>
+  <input type="text" name="author" placeholder="your name" value="web-user">
+  <button type="submit">Merge</button>
+</form>
+
+{% endblock %}

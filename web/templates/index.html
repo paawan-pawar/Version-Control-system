@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}BVCS · Commits{% endblock %}
+{% block content %}
+
+<div class="repo-header">
+  <h1>{{ root }}</h1>
+  <p>
+    Branch: <strong>{{ head.get('branch', 'none') if head else 'none' }}</strong> ·
+    HEAD: <code>{{ head.get('commit', '—')[:10] if (head and head.get('commit')) else '—' }}</code>
+    {% if verification.valid %}
+      <span class="badge ok">✓ Chain valid ({{ verification.blocks_checked }} blocks)</span>
+    {% else %}
+      <span class="badge bad">✗ Chain INVALID</span>
+    {% endif %}
+  </p>
+</div>
+
+{% if not verification.valid %}
+  <div class="alert">
+    <strong>Tamper detected:</strong>
+    <ul>{% for e in verification.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+  </div>
+{% endif %}
+
+<h2>Commits</h2>
+<table class="commits">
+  <thead>
+    <tr><th>Hash</th><th>Message</th><th>Author</th><th>Branch</th><th>Files</th><th>Merkle</th></tr>
+  </thead>
+  <tbody>
+  {% for c in commits %}
+    <tr>
+      <td><a href="{{ url_for('commit_detail', hash=c.hash) }}"><code>{{ c.short }}</code></a></td>
+      <td>
+        {{ c.message }}
+        {% if c.merge_parents %}<span class="tag">merge ← {{ c.merge_parents|join(", ") }}</span>{% endif %}
+      </td>
+      <td>{{ c.author }}</td>
+      <td><span class="branch">{{ c.branch }}</span></td>
+      <td>{{ c.file_count }}</td>
+      <td><code>{{ c.merkle[:10] }}</code></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<p class="hint">Tip: visit <a href="{{ url_for('graph') }}">Graph</a> to see the full chain.</p>
+{% endblock %}

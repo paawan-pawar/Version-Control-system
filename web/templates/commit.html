@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}BVCS · {{ commit.short }}{% endblock %}
+{% block content %}
+
+<h1>Commit <code>{{ commit.short }}</code></h1>
+<table class="meta">
+  <tr><th>Full hash</th><td><code>{{ commit.hash }}</code></td></tr>
+  <tr><th>Parent</th>
+      <td>
+        {% if commit.parent %}
+          <a href="{{ url_for('commit_detail', hash=commit.parent) }}"><code>{{ commit.parent_short }}</code></a>
+        {% else %}—{% endif %}
+      </td></tr>
+  {% if commit.merge_parents %}
+  <tr><th>Merged from</th>
+      <td>
+        {% for p in commit.merge_parents %}<code>{{ p }}</code>{% if not loop.last %}, {% endif %}{% endfor %}
+      </td></tr>
+  {% endif %}
+  <tr><th>Merkle root</th><td><code>{{ commit.merkle }}</code></td></tr>
+  <tr><th>Author</th><td>{{ commit.author }}</td></tr>
+  <tr><th>Branch</th><td><span class="branch">{{ commit.branch }}</span></td></tr>
+  <tr><th>Message</th><td>{{ commit.message }}</td></tr>
+</table>
+
+<h2>Files in this commit</h2>
+<table class="files">
+  <thead><tr><th>Path</th><th>SHA-256</th></tr></thead>
+  <tbody>
+  {% for path, h in commit.files.items() %}
+    <tr><td>{{ path }}</td><td><code>{{ h }}</code></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% if contents %}
+<h2>Contents</h2>
+{% for path, text in contents.items() %}
+  <h3>{{ path }}</h3>
+  <pre class="code">{{ text }}</pre>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

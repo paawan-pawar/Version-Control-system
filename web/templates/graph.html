@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}BVCS · Graph{% endblock %}
+{% block content %}
+
+<h1>Chain Graph</h1>
+<p>Each row is a block. Arrows point to parent (previous block).</p>
+
+<div class="graph">
+{% for n in nodes %}
+  <div class="node">
+    <span class="branch">{{ n.branch }}</span>
+    <code>{{ n.hash }}</code>
+    <span class="arrow">→ parent {% if n.parent %}<code>{{ n.parent }}</code>{% else %}<em>genesis</em>{% endif %}</span>
+    {% for m in n.merge %}<span class="tag">merge ← {{ m }}</span>{% endfor %}
+    <div class="msg">{{ n.message }}</div>
+  </div>
+{% endfor %}
+</div>
+
+{% endblock %}
